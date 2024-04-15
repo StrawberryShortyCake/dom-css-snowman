@@ -1,5 +1,6 @@
 import { SnowmanLogic } from "./snowman.js";
 
+/** this is the template for adding interactions to the Snowman UI */
 class SnowmanUI {
   constructor(maxWrong = 5) {
     console.debug("Snowman UI");
@@ -10,6 +11,7 @@ class SnowmanUI {
     this.$keyboard = document.querySelector("#Snowman-keyboard");
     this.$word = document.querySelector("#Snowman-word");
     this.$image = document.querySelector("#Snowman-image");
+    this.$main = document.querySelector("#Snowman");
 
     this.updateWord();
     this.addKeyboard();
@@ -55,9 +57,22 @@ class SnowmanUI {
   guessLetter(letter) {
     console.debug("guessLetter", letter);
 
-    const isCorrect = this.game.guessLetter(letter);
+    const isCorrect = this.game.guessLetter(letter); // this is the JS function >> true/ false
     this.updateWord();
     this.updateImage();
+    const gameState = this.game.gameState;
+
+    if (gameState === "WON" || gameState === "LOST") {
+      this.endGame(gameState);
+    }
+  }
+
+  /** Given the end game state, will display a message to the player */
+  endGame(endGameState) {
+    const $endGameMsgDiv = document.createElement("div");
+    $endGameMsgDiv.innerHTML =
+      `You've ${endGameState}! The word is ${this.game.answer}`;
+    this.$main.appendChild($endGameMsgDiv);
   }
 
   /** Handle clicking a letter button: disable button & handle guess. */
@@ -65,9 +80,13 @@ class SnowmanUI {
   handleGuess(evt) {
     console.debug("handleGuess");
 
+    if (!evt.target.matches("button")) return;
+
     const letter = evt.target.dataset.letter;
     this.guessLetter(letter);
   }
 }
+
+
 
 export { SnowmanUI };

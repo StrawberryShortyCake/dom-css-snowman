@@ -4,23 +4,24 @@ import { ENGLISH_WORDS } from "./words.js";
 
 /** Logic for snowman game.
  *
- * - answer: the secret word, like "apple"
- * - guessedLetters: set of guesses, like {a, b}
- * - numWrong: number of wrong guesses
- * - maxWrong: max number of wrong guesses before loss
- * - gameState: "PLAYING", "WON", or "LOST"
+ * - answer: the secret word, like "apple" -> grab from words.js
+ * - guessedLetters: set of guesses, like {a, b} -> user input
+ * - numWrong: number of wrong guesses -> automatic
+ * - maxWrong: max number of wrong guesses before loss -> constant/preset?
+ * - gameState: "PLAYING", "WON", or "LOST" -> automatic
  *
  */
 
+/**  Given a max wrong limit, it provides a template for ceating a Snowman game */
 class SnowmanLogic {
   constructor(maxWrong = 5) {
-    console.debug("SnowmanLogic", {maxWrong});
+    console.debug("SnowmanLogic", { maxWrong });
 
     this.answer = this.getSecret();
     this.guessedLetters = new Set();
     this.numWrong = 0;
     this.maxWrong = maxWrong;
-    this.gameState = "PLAYING"; // or "WON" or "LOST"
+    this.gameState = "PLAYING";
 
     console.log("answer = ", this.answer);
   }
@@ -57,7 +58,7 @@ class SnowmanLogic {
   /** Guess letter, update game state, and return t/f if letter correct. */
 
   guessLetter(ltr) {
-    console.debug("guessLetter", {ltr});
+    console.debug("guessLetter", { ltr });
 
     this.guessedLetters.add(ltr);
 
@@ -65,7 +66,13 @@ class SnowmanLogic {
 
     this.numWrong += isCorrect ? 0 : 1;
 
-    // TODO: this should update the gameState attr to "WON" or "LOST"
+    const currentGuess = this.getGuessedWord();
+
+    if (this.numWrong === this.maxWrong) {
+      this.gameState = "LOST";
+    } else if (currentGuess === this.answer) {
+      this.gameState = "WON";
+    }
 
     return isCorrect;
   }
