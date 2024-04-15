@@ -12,6 +12,7 @@ class SnowmanUI {
     this.$word = document.querySelector("#Snowman-word");
     this.$image = document.querySelector("#Snowman-image");
     this.$main = document.querySelector("#Snowman"); // have it in HTML
+    this.boundHandleGuess = this.handleGuess.bind(this);
 
     this.updateWord();
     this.addKeyboard();
@@ -33,7 +34,7 @@ class SnowmanUI {
     );
 
     this.$keyboard.append(...$letters);
-    this.$keyboard.addEventListener("click", this.handleGuess.bind(this));
+    this.$keyboard.addEventListener("click", this.boundHandleGuess);
   }
 
   /** Update guessed word on board. */
@@ -73,12 +74,17 @@ class SnowmanUI {
     $endGameMsgDiv.innerHTML =
       `You've ${this.game.gameState}! The word is ${this.game.answer}.`;
     this.$main.appendChild($endGameMsgDiv);
+
+    this.$keyboard.removeEventListener("click", this.boundHandleGuess);
   }
 
   /** Handle clicking a letter button: disable button & handle guess. */
 
   handleGuess(evt) {
     console.debug("handleGuess");
+
+    const currentLetter = evt.target;
+    currentLetter.disabled = true;
 
     if (!evt.target.matches("button")) return;
     // select specifically buttons with letter class to prevent future bugs
