@@ -68,7 +68,8 @@ class SnowmanLogic {
 
     const currentGuess = this.getGuessedWord();
 
-    if (this.numWrong === this.maxWrong) {
+    if (this.numWrong > this.maxWrong) {
+      console.log("chaning gamestate to LOST", this.numWrong);
       this.gameState = "LOST";
     } else if (currentGuess === this.answer) {
       this.gameState = "WON";

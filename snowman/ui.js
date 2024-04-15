@@ -11,7 +11,7 @@ class SnowmanUI {
     this.$keyboard = document.querySelector("#Snowman-keyboard");
     this.$word = document.querySelector("#Snowman-word");
     this.$image = document.querySelector("#Snowman-image");
-    this.$main = document.querySelector("#Snowman");
+    this.$main = document.querySelector("#Snowman"); // have it in HTML
 
     this.updateWord();
     this.addKeyboard();
@@ -57,21 +57,21 @@ class SnowmanUI {
   guessLetter(letter) {
     console.debug("guessLetter", letter);
 
-    const isCorrect = this.game.guessLetter(letter); // this is the JS function >> true/ false
+    const isCorrect = this.game.guessLetter(letter);
     this.updateWord();
     this.updateImage();
-    const gameState = this.game.gameState;
+    // const gameState = this.game.gameState; // we've lost the reference here
 
-    if (gameState === "WON" || gameState === "LOST") {
-      this.endGame(gameState);
+    if (this.game.gameState !== "PLAYING") {
+      this.endGame();
     }
   }
 
   /** Given the end game state, will display a message to the player */
-  endGame(endGameState) {
+  endGame() { // can aready access gameState
     const $endGameMsgDiv = document.createElement("div");
     $endGameMsgDiv.innerHTML =
-      `You've ${endGameState}! The word is ${this.game.answer}`;
+      `You've ${this.game.gameState}! The word is ${this.game.answer}.`;
     this.$main.appendChild($endGameMsgDiv);
   }
 
@@ -81,6 +81,7 @@ class SnowmanUI {
     console.debug("handleGuess");
 
     if (!evt.target.matches("button")) return;
+    // select specifically buttons with letter class to prevent future bugs
 
     const letter = evt.target.dataset.letter;
     this.guessLetter(letter);
