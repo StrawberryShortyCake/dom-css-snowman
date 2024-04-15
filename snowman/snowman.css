@@ -1,7 +1,31 @@
-#Snowman-keyboard .letter {
-  margin-right: 1em;
+
+body{
+  display: flex;
+  justify-content: center;
 }
 
+main{
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  width: 50vw;
+  align-items: center;
+}
+
+div{
+  margin: 1rem;
+}
 .clicked-button {
   background-color: red;
+}
+
+#Snowman-word{
+  font-size: x-large;
+  letter-spacing: 1em;
+}
+
+#Snowman-keyboard .letter {
+  width: 25px;
+  height: 25px;
+  margin: 1em;
 }
